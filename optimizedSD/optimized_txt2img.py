@@ -133,7 +133,7 @@ parser.add_argument(
 parser.add_argument(
     "--seed",
     type=int,
-    default=42,
+    default=random.randint(1,4294967295),
     help="the seed (for reproducible sampling)",
 )
 opt = parser.parse_args()

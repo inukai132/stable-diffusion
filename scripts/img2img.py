@@ -12,7 +12,7 @@ from einops import rearrange, repeat
 from torchvision.utils import make_grid
 from torch import autocast
 from contextlib import nullcontext
-import time
+import time, random, math
 from pytorch_lightning import seed_everything
 
 from ldm.util import instantiate_from_config
@@ -140,7 +140,7 @@ def main():
     parser.add_argument(
         "--n_samples",
         type=int,
-        default=2,
+        default=1,
         help="how many samples to produce for each given prompt. A.k.a batch size",
     )
     parser.add_argument(
@@ -182,7 +182,7 @@ def main():
     parser.add_argument(
         "--seed",
         type=int,
-        default=42,
+        default=random.randint(1,4294967295),
         help="the seed (for reproducible sampling)",
     )
     parser.add_argument(
@@ -212,7 +212,7 @@ def main():
     outpath = opt.outdir
 
     batch_size = opt.n_samples
-    n_rows = opt.n_rows if opt.n_rows > 0 else batch_size
+    n_rows = opt.n_rows if opt.n_rows > 0 else math.ceil(math.sqrt(opt.n_iter)) if batch_size == 1 else batch_size
     if not opt.from_file:
         prompt = opt.prompt
         assert prompt is not None
